@@ -1,0 +1,7 @@
+config.env
+__pycache__/
+*.pyc
+*.bin
+*.bin.zst
+*.lzo
+*.cpio
