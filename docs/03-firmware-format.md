@@ -16,7 +16,7 @@ The rootfs partition (5056K) is laid out as:
 python3 - <<'PY'
 d = open('rootfs_region.bin', 'rb').read()
 n = int.from_bytes(d[:4], 'little')
-open('rootfs.lzo', 'wb').write(b'\x89LZO\x00\r\n\x1a\n' + d[4:4 + n])
+open('rootfs.lzo', 'wb').write(b'\x89LZO' + d[4:4 + n])
 print('lzo stream:', n)
 PY
 lzop -d -c rootfs.lzo > rootfs.cpio
