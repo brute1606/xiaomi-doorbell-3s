@@ -53,3 +53,35 @@ running device is safe.
 - If the update is interrupted, the slot that was being written is invalid; the
   loader should fall back to the other slot. Verify this behaviour on your
   device before relying on it.
+
+## Slots and rebooting after an update
+
+The bootloader always starts **slot A** (the `rootfs` partition) and falls back
+to **slot B** (`rootfs1`) if A cannot be loaded. A single-slot update therefore
+writes the candidate into A and keeps B as the previous known-good image.
+
+Write order used by the helper script: slot B first, then slot A. If the write
+of A is interrupted, B still holds a bootable image.
+
+After the write the device has to be restarted — see
+[docs/11-reboot.md](11-reboot.md). The control channel marks long commands with
+a `#LONG` first line; the poller raises its execution budget from 20 s to 300 s
+for those, which is enough for a 5 MiB download plus two flash writes.
+
+## Device-side configuration
+
+The poller and the OTA script read `/config/net.env`:
+
+```sh
+HUB=192.0.2.10
+CMD_PORT=2231
+OUT_PORT=2232
+OTA_PORT=2233
+# optional: static address for the Linux side of the Wi-Fi interface
+STATIC_IP=192.0.2.20
+STATIC_MASK=255.255.255.0
+STATIC_GW=192.0.2.1
+```
+
+`STATIC_IP` is only needed when the vendor network setup does not configure the
+Linux interface (see [docs/10-troubleshooting.md](10-troubleshooting.md)).

@@ -1,5 +1,15 @@
 # Firmware releases
 
+## Current release: v0.2.0 (first working control channel)
+
+Contents: vendor firmware with the SoC-sleep patch, a control-channel poller,
+`reboot.sh` (watchdog reset), `ota.sh` and an optional UART service mode. The
+device reads its endpoint from `/config/net.env` (see
+[docs/09-ota.md](../docs/09-ota.md)); no addresses are baked into the image.
+
+Tested on: `MJML07-FJ`, 16 MiB Zbit ZB25VQ128, both slots written.
+
+
 Binary images are published as **GitHub Releases** assets, not committed to the
 repository. Each release contains:
 

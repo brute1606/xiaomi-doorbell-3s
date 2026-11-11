@@ -36,6 +36,12 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 
 ## Status
 
+Working today: control channel over Wi-Fi (outbound only), OTA to both slots
+with a watchdog-based restart, UART console for logs, and a service mode that
+enables a console shell on demand. Release **v0.2.0** is the first published
+build of this state. Still ahead: local RTSP for Home Assistant, MQTT events,
+and the BL616/wake research.
+
 - a rootfs with the SoC sleep disabled (`doorbell.out` patch) has been built and
   verified; the stock application and the UART console work;
 - OTA and the A/B slot scheme are work in progress.

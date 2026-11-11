@@ -46,3 +46,19 @@ message. It is noisy but harmless.
 
 Expected with the sleep patch: the SoC and the camera are always on. Use USB-C
 power; the battery then works as a backup.
+
+## Control channel never connects
+
+Symptom: the poller runs (its messages appear on the console) but the hub sees
+no connection, and `nc` reports `failed: Network is unreachable`.
+
+Cause: the Wi-Fi chip keeps its own DHCP lease and cloud session, but the Linux
+side of the interface (`bleth0`) is configured by the vendor script
+`/usr/bin/sta.sh`, which the daemon runs on an `IP_UPDATE` event. That event may
+arrive late or not at all, so `bleth0` has no address and no default route while
+the device still answers pings.
+
+Fix: set `STATIC_IP`/`STATIC_MASK`/`STATIC_GW` in `/config/net.env`. The poller
+re-applies them before every poll, so a lost address is restored automatically.
+Check with `ifconfig bleth0` over the console — the `RUNNING` flag must be
+present too; without it the interface has no carrier and nothing will connect.
