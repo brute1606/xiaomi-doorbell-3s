@@ -23,7 +23,7 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 
 | Path | Purpose |
 |---|---|
-| `docs/` | Hardware, partitions, image format, build, flashing, UART, QEMU sandbox, A/B slots, OTA |
+| `docs/` | Hardware, partitions, image format, build, flashing, UART, QEMU sandbox, A/B slots, OTA, network addressing |
 | `tools/` | Build / verify / flash / OTA scripts |
 | `firmware/` | Release notes; actual images are published as **GitHub Releases** assets |
 
