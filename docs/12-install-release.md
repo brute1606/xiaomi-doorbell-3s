@@ -112,3 +112,20 @@ known-good region on the hub for manual recovery.
   `sudo flashrom -p ch341a_spi -w stock.bin` and start over.
 - `docs/10-troubleshooting.md` lists the failures we hit: undetected chip, boot
   loop, dead console, missing network on the Linux side.
+
+## Minimal root build (v0.3.0)
+
+If you do not need the control channel features but want root on the device to
+build your own firmware:
+
+1. download `rootfs-region-v0.3.0.bin` and `SHA256SUMS`, verify;
+2. rewrite the hub placeholder in your copy (root is needed for `cpio`):
+
+   ```bash
+   sudo tools/embed-netenv.sh rootfs-region-v0.3.0.bin my-region.bin 192.0.2.10
+   ```
+
+3. merge into your own dump and flash both rootfs slots (option A, steps 3-4).
+
+The image keeps the vendor application intact and only stops the SoC from
+powering off, so you keep the stock behaviour and get a shell over the channel.

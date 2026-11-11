@@ -1,5 +1,27 @@
 # Firmware releases
 
+## Minimal root build: v0.3.0
+
+For people who only want **root access** on their own device as a starting point
+for their own firmware:
+
+- stock vendor application, unchanged, plus **one** patch: the SoC no longer
+  powers itself off, so the device stays reachable;
+- a control channel (`poller.sh`) and `reboot.sh` — no logs, no OTA helpers, no
+  services;
+- the hub address is read from `/config/net.env`; the published region ships
+  with a documentation placeholder, so rewrite it first:
+
+  ```bash
+  sudo tools/embed-netenv.sh rootfs-region-v0.3.0.bin my-region.bin 192.0.2.10
+  ```
+
+- root = shell commands through the channel; the UART console stays read-only on
+  the device we tested (the pad carries the SoC TX only).
+
+Everything else is the same as v0.2.0: merge the region into your own dump with
+`tools/build-image.sh`, flash both rootfs slots, keep your dump for rollback.
+
 ## Current release: v0.2.0 (first working control channel)
 
 Contents: vendor firmware with the SoC-sleep patch, a control-channel poller,
