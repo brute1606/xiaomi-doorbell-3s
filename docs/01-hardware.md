@@ -7,11 +7,11 @@
 | SoC | Ingenic **T31** (T31ZX variant), MIPS32r2 little-endian |
 | RAM | 64 MiB DDR2 (`mem=72M` in the kernel command line, part reserved as rmem) |
 | Camera | SmartSens **SC301IoT**, 3 MP |
-| Wi-Fi | **Bouffalo Lab BL616** (SDIO, `blwnet.ko`, `blctld`/`blctl`) |
+| Wi-Fi/BT | **Bouffalo Lab BL616** inside the `MSHWB01L-IB` module (SDIO, `blwnet.ko`, `blctld`/`blctl`, u.FL antenna connector) |
 | Flash | **Zbit ZB25VQ128**, 16 MiB SPI NOR (JEDEC `0x5E4018`) |
 | Power | Li-ion battery + charging board, USB-C |
 | Audio | I2S codec, speaker / microphone |
-| Power management | a separate MCU: powers the SoC on/off and monitors the battery |
+| Power management | no separate controller chip: the module above also handles power on/off and the event sources (see below) |
 
 ## Board photos
 
@@ -81,3 +81,35 @@ Some CH341A boards drive the SPI lines at 5 V even in 3.3 V mode. If your
 programmer is one of those, consider the hardware fix documented by others:
 [OpenIPC wiki](https://github.com/OpenIPC/wiki/blob/master/en/hardware-programmer-ch341a-voltage-fix.md),
 [thingino wiki](https://github.com/themactep/thingino-firmware/wiki/CH341a-programmer).
+
+## Board revision
+
+The PCB is marked `MJML3S_MBOARD_V15B`. No dedicated controller (MCU) chip is
+present on either side of the board:
+
+- the only large ICs are the T31 SoC and the flash chip;
+- the two crystals are **24.000 MHz** (next to the SoC) and **26.000 MHz**
+  (next to the USB-C connector); there is no 32.768 kHz RTC crystal, which a
+  dedicated low-power controller would normally need;
+- the remaining small parts are load switches and regulators for the
+  5 V / 3.3 V / 2.8 V / 1.5 V / 0.8 V rails, plus a pyroelectric PIR sensor,
+  the camera module and the battery connector.
+
+## Where the control logic lives
+
+The board has three functional blocks, not four:
+
+| Block | Role | Evidence |
+|---|---|---|
+| Ingenic T31 | Linux, application, video pipeline, our control channel | kernel, `doorbell.out`, `imp_sync_server` |
+| Zbit ZB25VQ128 | firmware storage (boot, tag, kernel, rootfs slots, config) | read/written with an external programmer |
+| `MSHWB01L-IB` module (BL616) | Wi-Fi/BT **and** power/event controller | UART0 is used by both the MCU daemon (`agent`) and the Wi-Fi daemon (`blctld`); the module holds the cloud session even when Linux has no address (TTL 255 ICMP replies, vendor connections); Bouffalo *NetHub* firmware allows a private control flow over UART/SDIO |
+
+So the "MCU" of this device is a role played by the module's firmware: it keeps
+the device reachable, powers the SoC on and off, reads the button and the PIR
+sensor, and talks to the application over `UART0` with a short binary framing
+(`0x7B` header, length, command, payload, XOR).
+
+This matters for custom firmware: the control path can be reused through the
+existing `agent` daemon (battery, button, PIR, LED, power), and replacing only
+the vendor application does not require reverse-engineering the MCU protocol.

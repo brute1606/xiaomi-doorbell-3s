@@ -11,7 +11,8 @@ console, A/B slots, OTA.
 
 - SoC: **Ingenic T31** (MIPS32r2, Linux 3.10.14)
 - Camera: **SmartSens SC301IoT** (3 MP)
-- Wi-Fi: **Bouffalo Lab BL616** (SDIO)
+- Wi-Fi/BT: **Bouffalo Lab BL616** in the `MSHWB01L-IB` module (SDIO)
+- Control/power: handled by that module's firmware over UART (no separate MCU chip)
 - Flash: **Zbit ZB25VQ128**, 16 MiB SPI NOR
 - Power: Li-ion battery + charging board, USB-C
 - Firmware: vendor **ZRT/Zeratul**, app `doorbell.out` + `imp_sync_server`
