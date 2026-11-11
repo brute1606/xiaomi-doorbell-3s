@@ -113,3 +113,35 @@ sensor, and talks to the application over `UART0` with a short binary framing
 This matters for custom firmware: the control path can be reused through the
 existing `agent` daemon (battery, button, PIR, LED, power), and replacing only
 the vendor application does not require reverse-engineering the MCU protocol.
+
+## Board photos
+
+![Ingenic T31 SoC](images/t31-soc.jpg)
+
+*The Ingenic T31 SoC. The PCB is marked `MJML3S_MBOARD_V15B`.*
+
+![Board, component side](images/board-back.jpg)
+
+*Component side: the T31 SoC, the SPI flash, the 24.000 MHz crystal near the
+SoC, the USB-C connector, the `MSHWB01L-IB` module (label redacted) with its
+u.FL antenna connector, and the load switches for the 5 V / 3.3 V / 2.8 V /
+1.5 V / 0.8 V rails.*
+
+![Board, camera side](images/board-front.jpg)
+
+*Camera side: the camera module on a flex cable, the pyroelectric PIR sensor in
+its metal can, the button/spring contact and the battery connector.*
+
+![PIR and power switches](images/board-pir-and-power.jpg)
+
+*Close-up of the PIR sensor and the load switches around it (`5V`, `3V3`,
+`0V8`, `1V5`, `2V8` rail markings).*
+
+![USB-C area and 26 MHz crystal](images/board-usbc-crystal.jpg)
+
+*USB-C connector and the 26.000 MHz crystal next to it.*
+
+![Wi-Fi module](images/board-wifi-module.jpg)
+
+*The `MSHWB01L-IB` Wi-Fi/BT module (BL616 inside). The printed label with the
+device MAC address is redacted.*

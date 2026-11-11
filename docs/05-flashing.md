@@ -124,3 +124,35 @@ reproduce those instructions here:
 
 Credits for that modification belong to their authors; this project only links
 to them.
+
+## The programmer used for this project
+
+![CH341A mini programmer](images/programmer-mini.jpg)
+
+*Black `CH341A Mini Programmer` (USB-A): 24Cxx EEPROM pads, 25-series SPI
+pads and a TTL serial header. This is the board used for the dumps in this
+repository.*
+
+![CH341A mini programmer, back side](images/programmer-mini-back.jpg)
+
+*Back side of the same board.*
+
+![CH341A with ZIF socket](images/programmer-zif.jpg)
+
+*Blue CH341A board with a ZIF-16 socket. Handy for a SOIC-8 clip adapter, but
+it is the same chip and the same limitation (5 V on the data lines).*
+
+![CH341A chip and crystal](images/programmer-ch341a-chip.jpg)
+
+*The CH341A chip and its 12 MHz crystal.*
+
+![3.3 V modification](images/programmer-trace-cut.jpg)
+
+*Our 3.3 V modification: the trace that feeds the 5 V level to the SPI lines is
+cut and reworked, so the flash chip is driven from 3.3 V. Do this only if you
+are comfortable with a knife and a soldering iron — otherwise buy a programmer
+that is 3.3 V from the factory.*
+
+**Warning:** a cut trace is permanent. Verify the voltages with a multimeter
+before connecting a flash chip, and never power the doorbell board while the
+clip is attached.
