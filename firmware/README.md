@@ -1,6 +1,6 @@
 # Firmware releases
 
-## Minimal root build: v0.3.0
+## Minimal root build: [v0.3.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.3.0)
 
 For people who only want **root access** on their own device as a starting point
 for their own firmware:

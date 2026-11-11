@@ -39,6 +39,17 @@ To install a **published release** instead of building from scratch, follow
 merge it into your own dump, flash, and (optionally) enable the control channel
 by building a region with your own hub address.
 
+## Releases
+
+- **[v0.3.0 — minimal root build](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.3.0)**: stock vendor firmware with a single
+  patch (the SoC stays awake) plus the control channel and `reboot.sh`; the
+  smallest starting point if you only want root on your own device.
+- **[v0.2.0 — first working control channel](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.2.0)**: same patch plus OTA,
+  service mode and log helpers.
+
+Only the rootfs region is published; your own dump is required for flashing
+(see [docs/12-install-release.md](docs/12-install-release.md)).
+
 ## Status
 
 Working today: control channel over Wi-Fi (outbound only), OTA to both slots

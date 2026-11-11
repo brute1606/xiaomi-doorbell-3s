@@ -113,7 +113,7 @@ known-good region on the hub for manual recovery.
 - `docs/10-troubleshooting.md` lists the failures we hit: undetected chip, boot
   loop, dead console, missing network on the Linux side.
 
-## Minimal root build (v0.3.0)
+## Minimal root build ([v0.3.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.3.0))
 
 If you do not need the control channel features but want root on the device to
 build your own firmware:
