@@ -34,6 +34,11 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 4. Test it in the QEMU sandbox: [docs/07-sandbox-qemu.md](docs/07-sandbox-qemu.md).
 5. Flash the device: [docs/05-flashing.md](docs/05-flashing.md).
 
+To install a **published release** instead of building from scratch, follow
+[docs/12-install-release.md](docs/12-install-release.md): download the asset,
+merge it into your own dump, flash, and (optionally) enable the control channel
+by building a region with your own hub address.
+
 ## Status
 
 Working today: control channel over Wi-Fi (outbound only), OTA to both slots
@@ -42,9 +47,6 @@ enables a console shell on demand. Release **v0.2.0** is the first published
 build of this state. Still ahead: local RTSP for Home Assistant, MQTT events,
 and the BL616/wake research.
 
-- a rootfs with the SoC sleep disabled (`doorbell.out` patch) has been built and
-  verified; the stock application and the UART console work;
-- OTA and the A/B slot scheme are work in progress.
 
 ## What is published (and what is not)
 

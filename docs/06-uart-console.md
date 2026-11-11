@@ -49,6 +49,28 @@ The prompt looks like `~ #`. Note that when the SoC is allowed to sleep the
 shell dies with the SoC; keep the device awake for an interactive session (see
 [docs/03-firmware-format.md](03-firmware-format.md)).
 
+In the firmware published here the console shell is **off by default**: the
+vendor `getty` line is removed, because the UART pads are only reachable with the
+case open and a permanently running root shell is not wanted on a doorbell. A
+build with the shell enabled gets it back:
+
+```bash
+sudo ./tools/build-rootfs.sh --dump stock.bin --out region.bin \
+  --hub 192.0.2.10 --console-shell
+```
+
+On a running device the shell can be enabled for 15 minutes through the control
+channel instead:
+
+```sh
+/usr/bin/service.sh uart 15    # starts /bin/sh -i on the console
+/usr/bin/service.sh off        # stops it early
+```
+
+On the hardware we tested, pad A carries the SoC TX only: injecting characters
+into the board did not work, so the console is read-only there. Treat the shell
+in the inittab as a fallback for boards where RX is accessible.
+
 ## Capturing logs
 
 ```bash

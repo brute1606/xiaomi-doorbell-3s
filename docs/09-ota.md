@@ -18,19 +18,18 @@ padding), not the whole 16 MiB image. Serve it from the hub:
 python3 tools/ota-serve.py rootfs_region.bin 2233
 ```
 
-On the device, download and write both slots:
+On the device the helper `/usr/bin/ota.sh` does the same job; it reads the hub
+from `/config/net.env` (or `/etc/net.env`), verifies the size and writes both
+slots:
 
 ```sh
-#!/bin/sh
-H=HUB_HOST; P=2233; EXPECT=5177344; IMG=/tmp/ota.img
-/bin/nc -d -w 120 "$H" "$P" > "$IMG"
-sz=$(stat -c%s "$IMG")
-[ "$sz" = "$EXPECT" ] || { echo "bad size: $sz"; exit 1; }
-flash_eraseall /dev/mtd4; flashcp "$IMG" /dev/mtd4
-flash_eraseall /dev/mtd3; flashcp "$IMG" /dev/mtd3
-sync
-reboot
+# from the hub, through the control channel
+printf '#LONG\n/usr/bin/ota.sh reboot\n' > /tmp/doorbell-cmdq
 ```
+
+`#LONG` raises the poller's execution limit to 300 s. Without the `reboot`
+argument the script only writes the slots; the restart is then done by
+`/usr/bin/reboot.sh` ([docs/11-reboot.md](11-reboot.md)).
 
 `flash_eraseall` and `flashcp` are busybox applets present in the stock
 firmware. The rootfs is mounted from RAM, so writing the rootfs partitions of a
@@ -42,17 +41,16 @@ running device is safe.
    ([docs/07-sandbox-qemu.md](07-sandbox-qemu.md)).
 2. Compare sizes before erasing; abort on mismatch.
 3. Keep the previous image on the hub for manual recovery.
-4. Prefer the A/B scheme once the slot switching is understood
-   ([docs/08-ab-slots.md](08-ab-slots.md)): write one slot, keep the other as a
-   known-good fallback.
+4. Keep the A/B scheme in mind ([docs/08-ab-slots.md](08-ab-slots.md)): slot A is
+   started first, slot B is the fallback; a single-slot update keeps the
+   previous image in the other slot.
 
 ## Notes
 
 - OTA must not run while the battery is low or while the device is about to
   sleep.
-- If the update is interrupted, the slot that was being written is invalid; the
-  loader should fall back to the other slot. Verify this behaviour on your
-  device before relying on it.
+- If the update is interrupted, the slot being written is invalid and the
+  loader falls back to the other slot (verified on hardware).
 
 ## Slots and rebooting after an update
 
