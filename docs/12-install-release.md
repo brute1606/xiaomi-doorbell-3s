@@ -8,9 +8,14 @@ and the layouts, and it is the part where most mistakes happen.
 
 The released `rootfs-region-<version>.bin` is generic: it contains no device
 data, but it also contains **no hub address** (the poller uses a documentation
-placeholder and simply finds nothing). The device works like the stock one, with
-the SoC kept awake. Use this option if you only want the region without the
-control channel, or as a sanity check before building your own.
+placeholder and simply finds nothing).
+
+**Current release: v0.4.0 — minimal working build.** It keeps the stock vendor
+application (started by default) and adds the control channel, continuous logs,
+diagnostics, a boot guard and a one-shot trial runner (`/config/trial`). It does
+**not** include video/RTSP and does **not** remove the vendor application. After
+flashing, rewrite the endpoint with `tools/embed-netenv.sh` (or edit
+`/etc/net.env` in your build) to use the channel.
 
 1. Download the release assets and verify them:
 
@@ -27,7 +32,7 @@ control channel, or as a sanity check before building your own.
 3. Merge the released region into **your** dump:
 
    ```bash
-   ./tools/build-image.sh stock.bin rootfs-region-v0.2.0.bin my-image.bin both
+   ./tools/build-image.sh stock.bin rootfs-region-v0.4.0.bin my-image.bin both
    ```
 
 4. Flash the two rootfs slots and verify:

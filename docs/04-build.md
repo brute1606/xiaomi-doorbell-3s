@@ -97,3 +97,48 @@ image sha256. Single-slot images are also possible (see
 The sandbox boots the image in QEMU and checks that the kernel starts, the
 device nodes work, the application starts and the marker file appears in
 `/config`. Do not flash an image that has not passed this check.
+
+
+## Reproducing the released minimal image (v0.4.0)
+
+The released region can be rebuilt from your own dump with the scripts in
+`tools/`:
+
+```bash
+# prerequisites: cpio, python3, lzop 1.03, root (cpio keeps /dev nodes)
+sudo NC=/path/to/nc DUMP=stock.bin LZOP_BIN=/path/to/lzop \
+     OUT=rootfs-region-v0.4.0.bin sh tools/build-region-from-dump.sh
+```
+
+What the script does:
+
+1. extracts the rootfs region from the 16 MiB dump (offset `0x2C8000`);
+2. unpacks the LZO+cpio archive as root;
+3. copies the control-channel scripts from `tools/device/`
+   (`poller.sh`, `poller-guard.sh`, `logs.sh`, `diag.sh`, `boot-guard.sh`,
+   `trial-run.sh`, `wdt-feed.sh`, `netcfg.sh`) into `/usr/bin/`;
+4. installs `/bin/nc` from the path you provide (stock busybox has no `nc`;
+   extract `/system/bin/nc` from the squashfs of your dump);
+5. writes `/etc/net.env` with documentation placeholder addresses and patches
+   `etc/init.d/rcS` to start the poller, logs, diagnostics, boot guard and the
+   trial runner next to the stock vendor application;
+6. repacks the region, prints its size and SHA-256.
+
+The released image keeps the vendor application: it starts by default, so the
+device behaves like stock until you point `net.env` at your own hub. No video,
+RTSP or vendor-app replacement is included in v0.4.0.
+
+### Helper binaries (optional daemon experiments)
+
+The C helpers used for the experiments (replacement daemon, keep-awake client)
+are **not** part of the released image: a static MIPS binary is large (~600 KiB)
+and does not fit into the 5056 KiB rootfs region next to the vendor
+application. They are built with a MIPS GCC 4.7.2 (glibc 2.16, 64-bit host)
+toolchain, e.g. from the Dafang-Hacks `mips-gcc472-glibc216-64bit` archive:
+
+```bash
+mips-linux-gnu-gcc -mips32r2 -Os -static -s -o doorbeld doorbeld.c
+```
+
+Static linking matters: the device rootfs uses uClibc and dynamic glibc
+binaries fail with `can't load library 'libc.so.6'`.

@@ -42,6 +42,10 @@ by building a region with your own hub address.
 
 ## Releases
 
+- **[v0.4.0 — minimal working build](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)**:
+  stock vendor application plus one control channel, continuous logs,
+  diagnostics, boot guard and a trial runner. No video/RTSP, the vendor
+  application is **not** removed. See [firmware/README.md](firmware/README.md).
 - **[v0.3.0 — minimal root build](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.3.0)**: stock vendor firmware with a single
   patch (the SoC stays awake) plus the control channel and `reboot.sh`; the
   smallest starting point if you only want root on your own device.

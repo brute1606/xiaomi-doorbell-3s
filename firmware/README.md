@@ -1,5 +1,21 @@
 # Firmware releases
 
+## Minimal working build: [v0.4.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)
+
+Starting point for a root-capable device that still behaves like stock:
+
+- **stock vendor application, unmodified** (it starts by default);
+- one control channel (`poller.sh`) with a supervisor (`poller-guard.sh`),
+  continuous logs, diagnostics, boot guard and a one-shot trial runner;
+- the endpoint is read from `/etc/net.env` with documentation placeholders —
+  rewrite it with `tools/embed-netenv.sh` before relying on the channel;
+- **not included**: video/RTSP, vendor-app removal, MQTT/Home Assistant
+  integration. Those experiments are described in the documentation but are
+  not part of this image.
+
+Rebuild it from your own dump: `tools/build-region-from-dump.sh`
+(see [docs/04-build.md](../docs/04-build.md)).
+
 ## Minimal root build: [v0.3.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.3.0)
 
 For people who only want **root access** on their own device as a starting point
