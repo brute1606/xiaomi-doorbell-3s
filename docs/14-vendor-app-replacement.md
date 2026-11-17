@@ -33,7 +33,10 @@ The two most important event frames observed on a live device:
 
 | Frame | Meaning |
 |---|---|
-| `7b0809…` | button / PIR event |
+| `7b0809 04 …` | doorbell button pressed |
+| `7b0809 05 …` | PIR motion started |
+| `7b0809 02 …` | PIR motion ended |
+| `7b0809 80 …` | tamper (removal) button |
 | `7b0488f7` | command sent back to play the doorbell chime |
 
 A replacement daemon that accepts the event connection, watches for `7b0809…`
