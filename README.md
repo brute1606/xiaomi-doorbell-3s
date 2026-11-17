@@ -23,7 +23,7 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 
 | Path | Purpose |
 |---|---|
-| `docs/` | Hardware, partitions, image format, build, flashing, UART, QEMU sandbox, A/B slots, OTA, network addressing |
+| `docs/` | Hardware, partitions, image format, build, flashing, UART, QEMU sandbox, A/B slots, OTA, network addressing, replacing the vendor application |
 | `tools/` | Build / verify / flash / OTA scripts |
 | `firmware/` | Release notes; actual images are published as **GitHub Releases** assets |
 
@@ -55,9 +55,14 @@ Only the rootfs region is published; your own dump is required for flashing
 
 Working today: control channel over Wi-Fi (outbound only), OTA to both slots
 with a watchdog-based restart, UART console for logs, and a service mode that
-enables a console shell on demand. Release **v0.2.0** is the first published
-build of this state. Still ahead: local RTSP for Home Assistant, MQTT events,
-and the BL616/wake research.
+enables a console shell on demand.
+
+Reverse engineering of the application ↔ `agent` JSON bus made it possible to
+run the device **without the vendor application**: a small static daemon
+receives button/PIR events, rings the chime, and reproduces the vendor's
+autonomous sleep sequence so the button still wakes the device (see
+[docs/14-vendor-app-replacement.md](docs/14-vendor-app-replacement.md)).
+Still ahead: MQTT/Home Assistant events, PIR/tamper logic and video/RTSP.
 
 
 ## What is published (and what is not)
