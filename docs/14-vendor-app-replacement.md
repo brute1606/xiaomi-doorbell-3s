@@ -85,6 +85,15 @@ The replacement daemon also pushes each event as a single line to the local hub
 Assistant automations can react to rings, motion and tamper events. The device
 itself does not need a direct route to the MQTT broker.
 
+## Home Assistant integration
+
+Events are relayed over MQTT to Home Assistant and exposed as MQTT event
+entities (`event_type` payload). An existing Node-RED voice-announcement flow
+built for the vendor integration is reused: the new entities were added to the
+same state triggers, so button presses, tamper and motion keep the original
+scenario. Note that the Home Assistant MQTT event platform expects the payload
+`{"event_type": "<type>"}`.
+
 ## Watchdog
 
 The vendor application is the watchdog owner. In a replacement image either
