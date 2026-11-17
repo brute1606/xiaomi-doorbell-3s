@@ -74,6 +74,12 @@ Notes:
 
 ## Events and notifications
 
+The PIR sensor only reports events after the factory initialization frames
+(`SetTrigger`, `PIRInterval`, `PIRSetSensitivity`) are sent to the control
+firmware on startup — a replacement daemon must repeat them.
+
+
+
 The replacement daemon also pushes each event as a single line to the local hub
 (`<topic> <json>`); a tiny hub-side relay publishes it to MQTT, so Home
 Assistant automations can react to rings, motion and tamper events. The device
@@ -113,7 +119,7 @@ Before flashing any region, run the sandbox gate (see
 | Control channel (outbound), logs, OTA | working |
 | Local doorbell chime without vendor app | working |
 | Autonomous sleep and button wake without vendor app | working |
-| PIR event handling | captured, logic pending |
-| Tamper (removal) button | captured, logic pending |
+| PIR motion events | working (factory init frames required) |
+| Tamper (removal) button | working (event published) |
 | MQTT / Home Assistant notifications | next step |
 | Video / RTSP | depends on `imp_sync_server`, later |
