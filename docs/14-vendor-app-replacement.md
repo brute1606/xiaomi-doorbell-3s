@@ -72,6 +72,13 @@ Notes:
   `fj_system_soc_powerOff` in the vendor binary: the patch breaks wake
   sources and the button stops waking the device.
 
+## Events and notifications
+
+The replacement daemon also pushes each event as a single line to the local hub
+(`<topic> <json>`); a tiny hub-side relay publishes it to MQTT, so Home
+Assistant automations can react to rings, motion and tamper events. The device
+itself does not need a direct route to the MQTT broker.
+
 ## Watchdog
 
 The vendor application is the watchdog owner. In a replacement image either
