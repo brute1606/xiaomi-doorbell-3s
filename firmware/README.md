@@ -1,6 +1,32 @@
 # Firmware releases
 
+## First build without the vendor application: [v0.5.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.5.0)
+
+This is the first image where the device boots **without** `doorbell.out`.
+The Wi-Fi module firmware and the control/power firmware stay untouched.
+
+- custom static daemon replaces the vendor application: ring, motion, tamper,
+  chime, battery level and charging, low-power sleep;
+- MQTT client with retained states, events, commands and a last-will
+  (`doorbell3s/#`) — Home Assistant examples in
+  [docs/15-mqtt-home-assistant.md](../docs/15-mqtt-home-assistant.md);
+- controls over MQTT: LED, IR-cut filter, tamper siren, sleep enable/disable;
+  "on base" state is published as well;
+- optional serial control channel (`poller`) with documentation placeholders in
+  `/etc/net.env`; not required for MQTT operation;
+- **no credentials in the image**: Wi-Fi (`/config/wifi.env` or USB gadget
+  provisioning) and MQTT (`/config/mqtt.env`) are configured on the device;
+- **no video/RTSP yet** — `imp_sync_server` is kept for future work;
+- safe re-flashing procedure, recovery notes and a programmer-based path:
+  [docs/16-safe-flashing.md](../docs/16-safe-flashing.md),
+  [docs/12-install-release.md](../docs/12-install-release.md).
+
+Assets: `rootfs-region-v0.5.0.bin` (slot A region, 5,177,344 bytes),
+`doorbell-3s-v0.5.0-full16M.bin` (full image, slot B = original factory
+firmware), `SHA256SUMS`, `RELEASE-NOTES.md`.
+
 ## Minimal working build: [v0.4.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)
+ [v0.4.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)
 
 Starting point for a root-capable device that still behaves like stock:
 

@@ -121,14 +121,45 @@ Before flashing any region, run the sandbox gate (see
 - presence of the application start line and a single poller;
 - boot in QEMU: kernel starts, application/daemon starts, no panic.
 
-## Current status
+## Current status (v0.5.0)
 
 | Feature | State |
 |---|---|
-| Control channel (outbound), logs, OTA | working |
+| Vendor application removed | working (not in the image) |
+| Control channel (outbound), logs, OTA | working, optional |
 | Local doorbell chime without vendor app | working |
 | Autonomous sleep and button wake without vendor app | working |
+| Sleep control from Home Assistant | working (`doorbell3s/sleep/set`) |
 | PIR motion events | working (factory init frames required) |
 | Tamper (removal) button | working (event published) |
-| MQTT / Home Assistant notifications | next step |
-| Video / RTSP | depends on `imp_sync_server`, later |
+| Battery level and charging | working (from control-firmware telemetry) |
+| Ring LED (white/orange) | working (`doorbell3s/led/set`) |
+| IR-cut filter | working (`doorbell3s/ircut/set`; ~150 ms GPIO sequence) |
+| Tamper siren (chime loop) | working (`doorbell3s/siren/set`, 30 s) |
+| "On base" state | working (`doorbell3s/on_base`) |
+| MQTT / Home Assistant integration | working, direct connection to any broker |
+| Video / RTSP | not implemented (`imp_sync_server` kept, no client) |
+
+The replacement daemon opens the same local JSON-RPC connection the vendor
+application used, replays the control-firmware initialization frames, publishes
+events and retained states over MQTT and accepts commands. See
+[docs/15-mqtt-home-assistant.md](15-mqtt-home-assistant.md) for the topic map
+and Home Assistant examples.
+
+### Notes
+
+- Sleep is initiated by the daemon after an idle period (default 150 s). The
+  wake sources stay armed: the button, the PIR sensor and the tamper switch wake
+  the SoC, which boots and rings the chime. `/config/no_sleep` disables sleep
+  entirely, and the `sleep` MQTT switch toggles it remotely.
+- The LED is driven through GPIO: the white and the orange ring segments are
+  separate lines. Both can be switched independently at the MQTT level by using
+  the raw command channel if needed.
+- The IR-cut filter is driven by a three-line GPIO sequence copied from the
+  vendor binary; the filter clicks audibly when it switches.
+- Battery telemetry comes from the control firmware (level and charging flag);
+  values are published only when the charging state is known.
+- If the broker is on a different L2 segment than the doorbell, add a static ARP
+  entry for the doorbell on its gateway. A sleeping Wi-Fi station may not answer
+  on-demand ARP; this caused multi-second stalls during development and was
+  fixed network-side.

@@ -23,7 +23,7 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 
 | Path | Purpose |
 |---|---|
-| `docs/` | Hardware, partitions, image format, build, flashing, UART, QEMU sandbox, A/B slots, OTA, network addressing, replacing the vendor application |
+| `docs/` | Hardware, partitions, image format, build, flashing (including safe re-flashing), UART, QEMU sandbox, A/B slots, OTA, network addressing, replacing the vendor application, MQTT/Home Assistant, release installation |
 | `tools/` | Build / verify / flash / OTA scripts |
 | `firmware/` | Release notes; actual images are published as **GitHub Releases** assets |
 
@@ -37,11 +37,17 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 
 To install a **published release** instead of building from scratch, follow
 [docs/12-install-release.md](docs/12-install-release.md): download the asset,
-merge it into your own dump, flash, and (optionally) enable the control channel
-by building a region with your own hub address.
+merge it into your own dump, flash, then configure Wi-Fi and MQTT on the device.
 
 ## Releases
 
+- **[v0.5.0 — first build without the vendor application](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.5.0)**:
+  the stock `doorbell.out` is gone; a small custom daemon handles ring, motion,
+  tamper, chime, battery, low-power sleep, LED, IR-cut and the tamper siren, and
+  talks MQTT (retained states, commands, last-will) to any broker — see
+  [docs/15-mqtt-home-assistant.md](docs/15-mqtt-home-assistant.md). No
+  video/RTSP yet. Credentials are not in the image; see
+  [docs/12-install-release.md](docs/12-install-release.md).
 - **[v0.4.0 — minimal working build](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)**:
   stock vendor application plus one control channel, continuous logs,
   diagnostics, boot guard and a trial runner. No video/RTSP, the vendor
