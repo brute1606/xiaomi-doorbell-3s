@@ -1,8 +1,25 @@
-# MQTT / Home Assistant interface (v0.5.0)
+# MQTT / Home Assistant interface (v0.6.0)
 
 The custom daemon connects to an MQTT broker directly (no cloud service, no
 vendor application). The device is a normal MQTT client with a last-will,
 retained state topics and plain commands.
+
+## Automatic discovery
+
+The daemon publishes **MQTT discovery** configs on startup, so Home Assistant
+creates the doorbell device and its entities automatically — no YAML needed:
+
+- events: `ring`, `tamper`, `motion`;
+- switches: LED, siren, "sleep allowed";
+- select: IR-cut (`auto`/`on`/`off`);
+- binary sensors: "on base", "charging";
+- sensor: battery level.
+
+Discovery configs are retained and published once per boot. The prefix defaults
+to `homeassistant` and can be overridden in `/config/mqtt.env`
+(`MQTT_DISCOVERY=<prefix>`; an empty value disables discovery). The device
+block uses `identifiers: ["doorbell3s"]`; `sw_version` is taken from the
+running image.
 
 ## Device configuration
 

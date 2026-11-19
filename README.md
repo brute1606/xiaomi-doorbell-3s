@@ -23,7 +23,7 @@ See [docs/01-hardware.md](docs/01-hardware.md) for details.
 
 | Path | Purpose |
 |---|---|
-| `docs/` | Hardware, partitions, image format, build, flashing (including safe re-flashing), UART, QEMU sandbox, A/B slots, OTA, network addressing, replacing the vendor application, MQTT/Home Assistant, release installation |
+| `docs/` | Hardware, partitions, image format, build, flashing (including safe re-flashing), UART, QEMU sandbox, A/B slots, OTA, network addressing, replacing the vendor application, MQTT/Home Assistant, video over RTSP, release installation |
 | `tools/` | Build / verify / flash / OTA scripts |
 | `firmware/` | Release notes; actual images are published as **GitHub Releases** assets |
 
@@ -40,6 +40,14 @@ To install a **published release** instead of building from scratch, follow
 merge it into your own dump, flash, then configure Wi-Fi and MQTT on the device.
 
 ## Releases
+
+- **[v0.6.0 — video over RTSP](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.6.0)**:
+  the custom daemon now also serves the encoder stream over RTSP directly from
+  the device: `/main` (3 MP H.265), `/sub` (512×384) and `/detect` (key-frame
+  only, about 1 fps) — no vendor application and no intermediate server, see
+  [docs/17-video-rtsp.md](docs/17-video-rtsp.md). Adds Home Assistant MQTT
+  discovery and gratuitous ARP announcements; keeps ring/motion/tamper/chime/
+  battery/sleep/LED/IR-cut/siren control.
 
 - **[v0.5.0 — first build without the vendor application](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.5.0)**:
   the stock `doorbell.out` is gone; a small custom daemon handles ring, motion,

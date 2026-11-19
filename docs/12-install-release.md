@@ -8,7 +8,7 @@ without leaving a half-written slot.
 
 ## Current release
 
-**v0.5.0 — first build without the vendor application.**
+**v0.6.0 — video over RTSP, MQTT auto-discovery, ARP announcements.**
 
 - the vendor `doorbell.out` is **not** in the image; a small custom daemon
   (`/usr/bin/doorbeld`) is started by `rcS` and talks to the control/power
@@ -17,7 +17,13 @@ without leaving a half-written slot.
 - features: ring / motion / tamper events, chime, battery level and charging,
   low-power sleep, LED, IR-cut filter, tamper siren, "on base" state, all over
   MQTT ([docs/15-mqtt-home-assistant.md](15-mqtt-home-assistant.md));
-- **no video/RTSP yet** (`imp_sync_server` is kept, but no client is shipped);
+- **video over RTSP** from the same encoder: `/main` (3 MP H.265 15 fps),
+  `/sub` (512×384) and `/detect` (key-frame-only, about 1 fps) — see
+  [docs/17-video-rtsp.md](17-video-rtsp.md);
+- Home Assistant **MQTT discovery**: entities are created automatically, no
+  YAML needed ([docs/15-mqtt-home-assistant.md](15-mqtt-home-assistant.md));
+- **gratuitous ARP** announcements, so other LAN hosts do not need static ARP
+  entries ([docs/13-network.md](13-network.md));
 - the image contains **no credentials**: MQTT and Wi-Fi are configured on the
   device after flashing.
 
@@ -25,8 +31,8 @@ Assets:
 
 | File | Purpose |
 |---|---|
-| `rootfs-region-v0.5.0.bin` | rootfs region for slot A (5,177,344 bytes) |
-| `doorbell-3s-v0.5.0-full16M.bin` | full 16 MiB image: slot A = v0.5.0, slot B = original factory firmware from the source dump |
+| `rootfs-region-v0.6.0.bin` | rootfs region for slot A (5,177,344 bytes) |
+| `doorbell-3s-v0.6.0-full16M.bin` | full 16 MiB image: slot A = v0.6.0, slot B = original factory firmware from the source dump |
 | `SHA256SUMS` | checksums |
 
 Use the region asset if you already have your own dump and want to keep your own
@@ -53,7 +59,7 @@ The released region contains no device data (tag block, identifiers, credentials
 3. Merge the released region into **slot A only** of your dump:
 
    ```bash
-   ./tools/build-image.sh stock.bin rootfs-region-v0.5.0.bin my-image.bin a
+   ./tools/build-image.sh stock.bin rootfs-region-v0.6.0.bin my-image.bin a
    ```
 
    Keeping slot B untouched leaves the factory firmware as a fallback. If you

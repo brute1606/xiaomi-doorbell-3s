@@ -1,5 +1,29 @@
 # Firmware releases
 
+## Video over RTSP: [v0.6.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.6.0)
+
+The custom image now also serves the encoder stream over RTSP directly from the
+device. The vendor application is still absent; the Wi-Fi module firmware and
+the control/power firmware are untouched.
+
+- **RTSP server on the device** (`/usr/bin/doorbell_rtsp`, static): `/main`
+  (H.265, 2048×1536, 15 fps), `/sub` (H.265, 512×384, 15 fps) and `/detect`
+  (key-frame only, about 1 fps) — no transcoding, no intermediate server, see
+  [docs/17-video-rtsp.md](../docs/17-video-rtsp.md);
+- Home Assistant **MQTT discovery**: the device and its entities are created
+  automatically (events, switches, select, binary sensors, battery);
+- **gratuitous ARP** announcements, so other LAN hosts do not need static ARP
+  entries for the doorbell;
+- MQTT keep-alive raised for unstable Wi-Fi links; discovery is published once
+  per boot;
+- all previous functionality: ring, motion, tamper, chime, battery, sleep, LED,
+  IR-cut, siren, "on base".
+
+Assets: `rootfs-region-v0.6.0.bin` (slot A region, 5,177,344 bytes),
+`doorbell-3s-v0.6.0-full16M.bin` (full image, slot B = original factory
+firmware from the source dump), `SHA256SUMS`, `RELEASE-NOTES.md`.
+
+
 ## First build without the vendor application: [v0.5.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.5.0)
 
 This is the first image where the device boots **without** `doorbell.out`.

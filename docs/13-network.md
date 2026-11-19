@@ -28,7 +28,9 @@ A control channel is a **bidirectional TCP connection with one fixed peer** (the
 hub), and both directions must be reliable: the device fetches a command and
 uploads the output. With one shared address:
 
-- the hub's ARP entry maps the address to the module MAC, and an incoming packet
+- the hub's ARP entry maps the address to the module MAC (recent firmware also
+  sends gratuitous ARP announcements every few seconds, so neighbours keep a
+  fresh entry without static ARP), and an incoming packet
   is visible to both stacks — which one answers (SYN-ACK or RST) is a race;
 - ICMP answers are duplicated (TTL 255 and TTL 64);
 - a DHCP renew on the chip side can move the address while the Linux static

@@ -12,7 +12,7 @@ Two vendor daemons stay in place:
 | Component | Role |
 |---|---|
 | `agent` | JSON-RPC bridge to the control/power firmware over UART; owns the MCU state (events, LED, siren, power) |
-| `imp_sync_server` | video/ISP service (kept as-is for now) |
+| `imp_sync_server` | video/ISP/encoder service (kept as-is; used by the custom RTSP daemon) |
 
 The application connects to `agent` on a local TCP port and uses two
 connections:
@@ -138,7 +138,7 @@ Before flashing any region, run the sandbox gate (see
 | Tamper siren (chime loop) | working (`doorbell3s/siren/set`, 30 s) |
 | "On base" state | working (`doorbell3s/on_base`) |
 | MQTT / Home Assistant integration | working, direct connection to any broker |
-| Video / RTSP | not implemented (`imp_sync_server` kept, no client) |
+| Video / RTSP | **implemented**: `/usr/bin/doorbell_rtsp` serves `/main`, `/sub` and `/detect` ([docs/17-video-rtsp.md](17-video-rtsp.md)) |
 
 The replacement daemon opens the same local JSON-RPC connection the vendor
 application used, replays the control-firmware initialization frames, publishes
