@@ -20,8 +20,10 @@ the control/power firmware are untouched.
   IR-cut, siren, "on base".
 
 Assets: `rootfs-region-v0.6.0.bin` (slot A region, 5,177,344 bytes),
-`doorbell-3s-v0.6.0-full16M.bin` (full image, slot B = original factory
-firmware from the source dump), `SHA256SUMS`, `RELEASE-NOTES.md`.
+`SHA256SUMS`, `RELEASE-NOTES.md`. A full 16 MiB image is not published: a
+complete dump also contains factory device data (boot environment identifiers,
+vendor configuration and cloud logs). Merge the region into your own dump
+instead — see [docs/12-install-release.md](../docs/12-install-release.md).
 
 
 ## First build without the vendor application: [v0.5.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.5.0)
@@ -46,8 +48,9 @@ The Wi-Fi module firmware and the control/power firmware stay untouched.
   [docs/12-install-release.md](../docs/12-install-release.md).
 
 Assets: `rootfs-region-v0.5.0.bin` (slot A region, 5,177,344 bytes),
-`doorbell-3s-v0.5.0-full16M.bin` (full image, slot B = original factory
-firmware), `SHA256SUMS`, `RELEASE-NOTES.md`.
+`SHA256SUMS`, `RELEASE-NOTES.md`. Note: the full 16 MiB asset of this release
+was withdrawn because a complete dump contains factory device data; only the
+rootfs region is published.
 
 ## Minimal working build: [v0.4.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)
  [v0.4.0](https://github.com/brute1606/xiaomi-doorbell-3s/releases/tag/v0.4.0)

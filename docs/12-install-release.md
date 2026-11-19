@@ -32,12 +32,13 @@ Assets:
 | File | Purpose |
 |---|---|
 | `rootfs-region-v0.6.0.bin` | rootfs region for slot A (5,177,344 bytes) |
-| `doorbell-3s-v0.6.0-full16M.bin` | full 16 MiB image: slot A = v0.6.0, slot B = original factory firmware from the source dump |
-| `SHA256SUMS` | checksums |
+| `SHA256SUMS` | checksum |
 
-Use the region asset if you already have your own dump and want to keep your own
-slot B. Use the full image if you prefer a single programmer write and accept
-that slot B becomes the same factory firmware as in the source dump.
+Only the rootfs region is published. A full 16 MiB image is **not** shipped:
+a complete dump also contains factory device data (boot environment identifiers,
+vendor configuration and cloud logs), which must not be published. Merge the
+region into **your own** dump as described below; that keeps your own slot B and
+your device-specific partitions untouched.
 
 ## Option A — merge the released region into your own dump (recommended)
 
