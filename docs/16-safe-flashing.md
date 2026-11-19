@@ -92,6 +92,6 @@ that serves the image, collects the verification value and compares checksums.
 5. Remove the clip, reconnect the battery, boot.
 
 Never write the reserved slot by accident: in this project slot A is the rootfs
-at offset `0x2C8000` (5,177,344 bytes) and slot B starts at `0x7B8000`. The
-published full 16 MiB image keeps slot B as the original factory firmware from
-the source dump.
+at offset `0x2C8000` (5,177,344 bytes) and slot B starts at `0x7B8000`. Only the
+rootfs region is published; merge it into your own dump so slot B and the
+device-specific partitions stay yours.

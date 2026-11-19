@@ -106,8 +106,8 @@ repository. Each release contains:
 
 - `rootfs-region-<version>.bin` — 5 177 344 bytes, the rootfs region
   (`length + lzop + padding`), ready for OTA or for a direct slot write;
-- `image-<version>.bin.zst` — optional full 16 MiB image (bootloader, tag,
-  kernel included), compressed;
+- a full 16 MiB image is **not** published: a complete dump contains factory
+  device data, so merge the region into your own dump instead;
 - `SHA256SUMS` — checksums for all assets;
 - release notes: what changed, which device revision it was tested on, known
   issues and the rollback command.
