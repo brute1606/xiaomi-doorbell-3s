@@ -178,3 +178,13 @@ Latency measured on a local network: LED commands 5–50 ms, IR-cut ~200 ms
   for a **static ARP entry** for the doorbell on its gateway. A sleeping Wi-Fi
   station may not answer on-demand ARP reliably; this was the root cause of
   multi-second stalls seen during development.
+
+## Entities added in November 2026
+
+| Entity | Topic | Notes |
+|---|---|---|
+| switch `usbgadget` | `doorbell3s/usbgadget` + `/set` | enables/disables the USB serial console shell |
+
+The `ircut` select now also switches the image signal processor between day
+(colour) and night (monochrome) modes, so IR illumination no longer produces a
+magenta cast.

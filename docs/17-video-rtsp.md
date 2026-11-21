@@ -71,3 +71,18 @@ ffmpeg -v error -rtsp_transport tcp -i rtsp://192.0.2.20:554/main -t 5 -f null -
   daemon reconnects, but no software can compensate for a poor radio link.
 - The daemon only works together with the vendor `imp_sync_server`; it does not
   replace the ISP/encoder stack.
+
+## Low-latency live view (WebRTC)
+
+The RTSP server is the only video source on the device; any restreamer can sit
+in front of it. A common setup is a go2rtc instance that pulls one of the
+RTSP paths and republishes it as a WebRTC stream:
+
+- use `/sub` (512×384) for interactive live view — it is much lighter for the
+  battery-powered device and its Wi-Fi link, while `/main` stays reserved for
+  full-quality recording;
+- point the camera/NVR integration at the go2rtc stream name; WebRTC playback
+  in a browser then avoids the multi-second segment latency of HLS.
+
+The device itself does not transcode; every consumer pulls an encoded stream
+directly from the encoder.

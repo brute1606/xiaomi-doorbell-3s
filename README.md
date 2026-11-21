@@ -71,16 +71,36 @@ Only the rootfs region is published; your own dump is required for flashing
 
 ## Status
 
-Working today: control channel over Wi-Fi (outbound only), OTA to both slots
-with a watchdog-based restart, UART console for logs, and a service mode that
-enables a console shell on demand.
+Working today: the device runs **without the vendor application**. A small
+static daemon receives button/PIR/tamper events, rings the chime, reproduces
+the vendor's autonomous sleep sequence, and publishes everything to MQTT with
+Home Assistant discovery. Video is served by the device over RTSP (`/main`,
+`/sub`, `/detect`); a low-latency WebRTC live view can be built on top of a
+go2rtc restream. The device clock is synchronised over SNTP for the on-screen
+timestamp and recordings. A/B OTA, UART console and service mode are
+available; both slots can hold the same image for a rollback target.
+See [docs/14-vendor-app-replacement.md](docs/14-vendor-app-replacement.md),
+[docs/17-video-rtsp.md](docs/17-video-rtsp.md) and
+[docs/18-changelog-2026-11.md](docs/18-changelog-2026-11.md).
 
-Reverse engineering of the application ↔ `agent` JSON bus made it possible to
-run the device **without the vendor application**: a small static daemon
-receives button/PIR events, rings the chime, and reproduces the vendor's
-autonomous sleep sequence so the button still wakes the device (see
-[docs/14-vendor-app-replacement.md](docs/14-vendor-app-replacement.md)).
-Still ahead: MQTT/Home Assistant events, PIR/tamper logic and video/RTSP.
+## What's new in November 2026
+
+- **Event delivery hardened.** The local JSON bus between the daemon and the
+  media/control agent has a single downstream slot; the daemon now re-arms it
+  periodically, reopens the event socket automatically and restarts itself
+  after repeated idle periods. Button notifications are delivered
+  continuously, including after network hiccups.
+- **Time synchronisation.** The daemon sets the clock over SNTP at boot and
+  every 30 minutes, so the burned-in timestamp and recordings are correct.
+- **First-run provisioning over USB.** When no Wi-Fi configuration exists, the
+  device exposes a USB Ethernet gadget with a minimal web page for Wi-Fi and
+  MQTT settings; no vendor cloud or app is involved. With a configuration
+  present, the same port offers a serial console shell instead.
+- **USB gadget on/off from MQTT** (Home Assistant switch): the serial console
+  can be enabled and disabled remotely.
+- **Day/night mode.** The daemon now switches the image signal processor to
+  its night mode together with the IR-cut filter, so IR illumination produces
+  a clean monochrome picture instead of a magenta-tinted colour image.
 
 
 ## What is published (and what is not)
